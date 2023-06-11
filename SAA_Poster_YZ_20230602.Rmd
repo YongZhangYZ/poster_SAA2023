@@ -1,0 +1,148 @@
+---
+title: Sample size planning for person-specific temporal network models in N=1 studies
+
+author:
+  - name: Yong Zhang
+    affil: 1
+  - name: Jordan Revol
+    affil: 2
+  - name: Laura F. Bringmann
+    affil: 1
+  - name: Eva Ceulemans
+    affil: 2
+  - name: Anja F. Ernst
+    affil: 1
+  - name: Ginette Lafit
+    affil: 2
+
+affiliation:
+  - num: 1
+    address: Department of Psychometrics and Statistics, University of Groningen; the Netherlands
+  - num: 2
+    address: Research Group of Quantitative Psychology and Individual Differences, KU Leuven; Belgium
+
+column_numbers: 4
+primary_colour: "#035AA6"
+secondary_colour: "#035AA6"
+author_textcol: "#FFFFFF"
+accent_colour: "#035AA6"
+sectitle2_textcol: "#035AA6"
+
+titlebox_height: "12%"
+# titlebox_borderwidth: "0.8cm"
+poster_height: "33.1in"
+poster_width: "46.8in"
+title_textsize: "80pt"
+author_textsize: "60pt"
+sectitle_textsize: "60pt"
+
+knit: pagedown::chrome_print
+output: 
+  posterdown::posterdown_html
+    # :
+    # self_contained: true
+#bibliography: citations.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(icons)
+library(rsvg)
+library(dplyr)
+library(ggplot2)
+```
+
+# Introduction
+
+## Background
+
+- **Network theory of psychopathology**: mental disorders are characterised by consistent interactions of symptoms over time
+- **Person-specific network**: visualize such temporal interactions in intensive longitudinal data
+- **Vector Autoregressive (VAR) model**: the statistical model behind networks -- highly parameterized, used more for exploration than confirmation
+$$
+\mathbf{y_t} = \mathbf{\Delta} + \mathbf{\Phi}\mathbf{y_{t-1}} + \mathbf{\epsilon_t} \\
+\mathbf{\epsilon_t}\sim \mathcal{N}(\mathbf{0}, \mathbf{\Sigma})
+$$
+- **Overfitting**: model estimates represent too much random noise in a sample and cannot generalize well to the population, usually caused by 
+  - high model complexity and 
+  - small sample size
+- Our current network studies might be guilty of both
+- **Predictive accuracy analysis (PAA)**: simulation-based technique used to explicitly evaluate the risk of overfitting for networks (Revol et al., 2023)
+
+## The current study
+
+Three main goals of the study includes: \
+`r icon_style(icons::fontawesome("lightbulb", style = "solid"), fill = "#035AA6")` $~$ Applying predictive accuracy analysis to investigate the quality of person-specific networks \
+`r icon_style(icons::fontawesome("crown", style = "solid"), fill = "#035AA6")` Demonstrating its usage of sample size planning for `future` single-case network studies \
+`r icon_style(icons::fontawesome("crown", style = "solid"), fill = "#035AA6")` and of evaluating the risk of overfitting for networks estimated in `past` network studies \
+
+# PAA: stepwise procedures
+
+- Step 1. Determine simulation parameters
+- Step 2. Simulate datasets:
+  - **Training sets**: multiple small datasets, imitating **samples** collected from a participant
+  - **Test set**: one large dataset, imitating **future unseen data** of the participant
+- Step 3. Estimate networks from all training sets and make predictions for the test set
+- Step 4. Calculate **squared Mahalanobis distance** as the standardized multivariate prediction error and evaluate the predictive accuracy of each network
+- Step 5. Calculate **predictive accuracy probability (PAP)**:
+  - The probability that an estimated network can predict future unseen data accurately
+  - A threshold of PAP can be set (e.g., 80%) to judge whether the risk of overfitting for an estimated network is sufficiently low
+
+<center>
+![**Figure 1.** Stepwise procedures of PAA](Figures/Fig1_PAA_procedures.jpg){height=85%, width=85%}
+</center>  
+
+# Application 1: new studies
+
+**Key question**: how many time-points in a sample are required for PAP of estimated networks to be high enough?
+
+<center>
+![**Figure 2.** A hypothesized network](Figures/Fig2_example_network_2node.png){height=50%, width=50%}
+</center>
+<!-- For this network, results are as follows: -->
+<center>
+![**Table 1.** Results of PAA for the hypothetical network](Figures/Tab1_PAA_result_hyp.jpg){height=70%, width=70%}
+</center>
+
+# Application 2: previous studies
+
+**Key question**: given the number of time-points in the analysis of the study, how likely is it that the estimated network did not overfit the sample?
+
+## Standard network: Bringmann et al. (2013)
+
+Note: Researchers of this study analyzed data of multiple participants using a multilevel approach. The following analysis is only based on data of one participant and should thus be taken with caution.
+
+<center>
+![**Figure 3.** The estimated network in Bringmann et al. (2013)](Figures/Fig3_bringmann2013.png){height=70%, width=70%}
+</center>
+
+<center>
+![**Table 2.** Results of PAA for Bringmann et al. (2013)](Figures/Tab2_PAA_bringmann2013.jpg){height=70%, width=70%}
+</center>
+
+## Regualrized network: Epskamp et al. (2018)
+
+**Regularization**: to limit spurious edges, weak edges are shrinked to 0, which results in a sparser network
+<center>
+![**Figure 4.** The estimated network in Epskamp et al. (2018)](Figures/Fig4_epskamp2018.png){height=70%, width=70%}
+</center>
+
+<center>
+![**Table 3.** Results of PAA for Epskamp et al. (2018)](Figures/Tab3_PAA_epskamp2018.jpg){height=70%, width=70%}
+</center>
+
+# Conclusion and discussion
+
+- Empirical network studies have **insufficient PAP** and thus are at considerable risks of overfitting.
+- **Regularization** can help avoid overfitting to some extent but not necessarily to a satisfactory level. 
+- **Careful sample size planning** is important. During sample size planning, other practical aspects should also be considered, for example how to handle 
+  - overnight lags,
+  - missing data, etc.
+- **Idealistic simulation setting**: should consider potential problems when analyzing actual data, for example 
+  - violations of model assumptions, 
+  - potential skewness in symptom measurements, etc.
+
+## Key reference
+<!-- For a closer look at the technical details of PAA, please refer to the preprint:  -->
+Revol, J., Lafit, G., & Ceulemans, E. (2023). *A new sample size planning approach for the (V)AR (1) model: Predictive Accuracy Analysis.* https://doi.org/10.31234/osf.io/2geh4
+
